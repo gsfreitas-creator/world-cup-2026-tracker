@@ -7,49 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
-        
-        body { 
-            font-family: 'Inter', system_ui, sans-serif; 
-        }
-        
-        .font-display { 
-            font-family: 'Space Grotesk', 'Inter', sans-serif; 
-            font-weight: 600; 
-        }
-
-        .premium-dark {
-            background: linear-gradient(135deg, #0a0f1e 0%, #121a2e 100%);
-        }
-
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
         .section { display: none; }
         .section.active { display: block; }
-
-        .nav-bottom {
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.1);
-        }
-
-        .gold-accent {
-            color: #f4c430;
-        }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-4px); }
     </style>
 </head>
-<body class="bg-[#0a0f1e] text-slate-200 premium-dark">
-    
-    <!-- Top Header -->
-    <header class="sticky top-0 z-50 bg-[#0a0f1e]/95 backdrop-blur-lg border-b border-slate-700">
+<body class="bg-[#0a0f1e] text-slate-200">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[#0a0f1e] border-b border-slate-700">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-x-3">
-                <div class="w-11 h-11 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-inner">
+                <div class="w-11 h-11 bg-emerald-600 rounded-2xl flex items-center justify-center">
                     <i class="fa-solid fa-trophy text-white text-3xl"></i>
                 </div>
                 <div>
@@ -57,14 +29,10 @@
                     <p class="text-xs text-emerald-400 -mt-1">CAN • MEX • USA</p>
                 </div>
             </div>
-            
-            <div class="flex items-center gap-x-2">
-                <button onclick="showInstallPrompt()" 
-                        class="px-4 py-2 bg-white text-slate-950 hover:bg-amber-50 font-semibold rounded-3xl text-sm flex items-center gap-x-2 active:scale-[0.985]">
-                    <i class="fa-solid fa-download"></i>
-                    <span class="hidden sm:inline">Install</span>
-                </button>
-            </div>
+            <button onclick="showInstallPrompt()" class="px-4 py-2 bg-white text-slate-950 font-semibold rounded-3xl text-sm flex items-center gap-x-2">
+                <i class="fa-solid fa-download"></i>
+                <span class="hidden sm:inline">Install</span>
+            </button>
         </div>
     </header>
 
@@ -75,59 +43,53 @@
                 <div>
                     <div class="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-3xl bg-emerald-950 border border-emerald-700 text-sm mb-4">
                         <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                        <span class="font-medium">48 TEAMS • 104 MATCHES</span>
+                        <span>48 TEAMS • 104 MATCHES</span>
                     </div>
-                    
-                    <h2 class="font-display text-5xl md:text-6xl font-semibold tracking-tighter leading-none">The biggest<br>World Cup ever</h2>
-                    <p class="mt-3 text-xl text-slate-300 max-w-md">Canada • Mexico • United States • June 11 – July 19</p>
+                    <h2 class="font-display text-5xl font-semibold tracking-tighter">The biggest World Cup ever</h2>
+                    <p class="mt-2 text-xl text-slate-300">Canada • Mexico • United States • June 11 – July 19</p>
                 </div>
-                
                 <div class="text-center md:text-right">
-                    <div class="text-sm text-slate-400 mb-1">TIME UNTIL OPENING MATCH</div>
-                    <div id="countdown" class="font-display text-4xl font-bold text-emerald-400 tabular-nums">12d 14h 22m</div>
+                    <div class="text-xs text-slate-400">TIME UNTIL OPENING MATCH</div>
+                    <div id="countdown" class="font-display text-4xl font-bold text-emerald-400">12d 14h 22m</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
+    <!-- Bottom Nav -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#121a2e] border-t border-slate-700 z-50 md:hidden">
         <div class="flex justify-around py-2 text-xs">
-            <button onclick="switchTab('home')" class="nav-bottom-btn flex flex-col items-center px-4 py-1 active:text-emerald-400" id="nav-home">
-                <i class="fa-solid fa-home text-lg mb-0.5"></i>
-                <span>Home</span>
+            <button onclick="switchTab('home')" class="flex flex-col items-center px-4 py-1 text-emerald-400" id="nav-home">
+                <i class="fa-solid fa-home text-lg"></i><span>Home</span>
             </button>
-            <button onclick="switchTab('schedule')" class="nav-bottom-btn flex flex-col items-center px-4 py-1 active:text-emerald-400" id="nav-schedule">
-                <i class="fa-solid fa-calendar text-lg mb-0.5"></i>
-                <span>Schedule</span>
+            <button onclick="switchTab('schedule')" class="flex flex-col items-center px-4 py-1" id="nav-schedule">
+                <i class="fa-solid fa-calendar text-lg"></i><span>Schedule</span>
             </button>
-            <button onclick="switchTab('teams')" class="nav-bottom-btn flex flex-col items-center px-4 py-1 active:text-emerald-400" id="nav-teams">
-                <i class="fa-solid fa-users text-lg mb-0.5"></i>
-                <span>Teams</span>
+            <button onclick="switchTab('teams')" class="flex flex-col items-center px-4 py-1" id="nav-teams">
+                <i class="fa-solid fa-users text-lg"></i><span>Teams</span>
             </button>
-            <button onclick="switchTab('legends')" class="nav-bottom-btn flex flex-col items-center px-4 py-1 active:text-emerald-400" id="nav-legends">
-                <i class="fa-solid fa-star text-lg mb-0.5"></i>
-                <span>Legends</span>
+            <button onclick="switchTab('legends')" class="flex flex-col items-center px-4 py-1" id="nav-legends">
+                <i class="fa-solid fa-star text-lg"></i><span>Legends</span>
             </button>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 pb-24 md:pb-8">
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-4 pb-24">
         
         <!-- HOME -->
         <div id="section-home" class="section active">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6">
-                    <h3 class="font-semibold text-lg mb-4">By The Numbers</h3>
+                    <h3 class="font-semibold mb-4">By The Numbers</h3>
                     <div class="grid grid-cols-3 gap-4 text-center">
-                        <div><div class="text-4xl font-bold text-emerald-400">48</div><div class="text-xs text-slate-400">Teams</div></div>
-                        <div><div class="text-4xl font-bold text-emerald-400">104</div><div class="text-xs text-slate-400">Matches</div></div>
-                        <div><div class="text-4xl font-bold text-emerald-400">16</div><div class="text-xs text-slate-400">Venues</div></div>
+                        <div><div class="text-4xl font-bold text-emerald-400">48</div><div class="text-xs">Teams</div></div>
+                        <div><div class="text-4xl font-bold text-emerald-400">104</div><div class="text-xs">Matches</div></div>
+                        <div><div class="text-4xl font-bold text-emerald-400">16</div><div class="text-xs">Venues</div></div>
                     </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-amber-900/30 to-[#1a2338] border border-amber-700/50 rounded-3xl p-6 flex flex-col justify-center">
+                <div class="bg-gradient-to-br from-amber-900/30 to-[#1a2338] border border-amber-700/50 rounded-3xl p-6">
                     <div class="flex items-center gap-x-3 mb-3">
                         <i class="fa-solid fa-tachometer-alt text-amber-400 text-2xl"></i>
                         <div>
@@ -136,7 +98,7 @@
                         </div>
                     </div>
                     <p class="text-sm text-slate-300">Lock your predictions and compete for points.</p>
-                    <button onclick="alert('Prediction Game coming in V3.0!')" class="mt-4 w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-black font-semibold rounded-3xl text-sm">Join Waitlist</button>
+                    <button onclick="alert('Coming in V3.0!')" class="mt-4 w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-black font-semibold rounded-3xl text-sm">Join Waitlist</button>
                 </div>
             </div>
         </div>
@@ -149,7 +111,7 @@
 
         <!-- TEAMS -->
         <div id="section-teams" class="section">
-            <h3 class="font-semibold text-xl mb-4">All Teams • Squads &amp; Facts</h3>
+            <h3 class="font-semibold text-xl mb-4">Teams • Squads &amp; Facts</h3>
             <div id="teams-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
@@ -164,11 +126,9 @@
     <script>
         function startCountdown() {
             const el = document.getElementById('countdown');
-            if (!el) return;
             const target = new Date('2026-06-11T15:00:00-04:00').getTime();
             setInterval(() => {
-                const now = Date.now();
-                const diff = target - now;
+                const diff = target - Date.now();
                 if (diff < 0) { el.innerHTML = "It's Match Day!"; return; }
                 const d = Math.floor(diff / 86400000);
                 const h = Math.floor((diff % 86400000) / 3600000);
@@ -178,106 +138,82 @@
         }
 
         const teams = [
-            { 
-                name: "Mexico", group: "A", flag: "https://flagcdn.com/w160/mx.png",
-                squad: ["Chicharito", "Tecatito", "Guardado", "Pineda"],
-                fact: "Hosts for the third time. Last hosted in 1986."
-            },
-            { 
-                name: "Brazil", group: "C", flag: "https://flagcdn.com/w160/br.png",
-                squad: ["Vinícius Jr", "Rodrygo", "Casemiro", "Alisson"],
-                fact: "5-time champions. Most successful nation in history."
-            },
-            { 
-                name: "Argentina", group: "K", flag: "https://flagcdn.com/w160/ar.png",
-                squad: ["Messi", "Di María", "Martínez", "Otamendi"],
-                fact: "Defending champions (2022 winners)."
-            },
-            { 
-                name: "France", group: "J", flag: "https://flagcdn.com/w160/fr.png",
-                squad: ["Mbappé", "Griezmann", "Pogba", "Lloris"],
-                fact: "Back-to-back finalists in 2018 &amp; 2022."
-            },
-            { 
-                name: "United States", group: "D", flag: "https://flagcdn.com/w160/us.png",
-                squad: ["Pulisic", "Weah", "Adams", "Turner"],
-                fact: "Co-hosts for the first time. Best finish: 3rd (1930)."
-            }
+            { name: "Mexico", group: "A", flag: "https://flagcdn.com/w160/mx.png", squad: ["Chicharito", "Tecatito", "Guardado", "Pineda"], fact: "Hosts for the third time." },
+            { name: "Brazil", group: "C", flag: "https://flagcdn.com/w160/br.png", squad: ["Vinícius Jr", "Rodrygo", "Casemiro", "Alisson"], fact: "5-time champions." },
+            { name: "Argentina", group: "K", flag: "https://flagcdn.com/w160/ar.png", squad: ["Messi", "Di María", "Martínez", "Otamendi"], fact: "Defending champions (2022)." },
+            { name: "France", group: "J", flag: "https://flagcdn.com/w160/fr.png", squad: ["Mbappé", "Griezmann", "Pogba", "Lloris"], fact: "Back-to-back finalists." },
+            { name: "United States", group: "D", flag: "https://flagcdn.com/w160/us.png", squad: ["Pulisic", "Weah", "Adams", "Turner"], fact: "Co-hosts for the first time." }
         ];
 
         const legends = [
             { name: "Lionel Messi", country: "Argentina", achievement: "2022 World Cup Winner", flag: "https://flagcdn.com/w160/ar.png" },
             { name: "Kylian Mbappé", country: "France", achievement: "2022 Golden Boot", flag: "https://flagcdn.com/w160/fr.png" },
-            { name: "Vinícius Júnior", country: "Brazil", achievement: "Rising Global Superstar", flag: "https://flagcdn.com/w160/br.png" },
+            { name: "Vinícius Júnior", country: "Brazil", achievement: "Global Superstar", flag: "https://flagcdn.com/w160/br.png" },
             { name: "Christian Pulisic", country: "USA", achievement: "USMNT Captain", flag: "https://flagcdn.com/w160/us.png" }
         ];
 
         function renderTeams() {
-            const container = document.getElementById('teams-grid');
-            container.innerHTML = '';
-            teams.forEach(team => {
-                const div = document.createElement('div');
-                div.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-5 card-hover`;
-                div.innerHTML = `
+            const c = document.getElementById('teams-grid');
+            c.innerHTML = '';
+            teams.forEach(t => {
+                const d = document.createElement('div');
+                d.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-5 card-hover`;
+                d.innerHTML = `
                     <div class="flex items-center gap-x-4 mb-4">
-                        <img src="\( {team.flag}" class="w-16 h-11 object-cover rounded-xl border border-slate-600" alt=" \){team.name} flag">
+                        <img src="${t.flag}" class="w-16 h-11 object-cover rounded-xl border border-slate-600" alt="">
                         <div>
-                            <div class="font-semibold text-2xl">${team.name}</div>
-                            <div class="text-emerald-400 text-sm">Group ${team.group}</div>
+                            <div class="font-semibold text-2xl">${t.name}</div>
+                            <div class="text-emerald-400 text-sm">Group ${t.group}</div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="text-xs text-slate-400 mb-1">KEY PLAYERS</div>
-                        <div class="flex flex-wrap gap-1.5">
-                            \( {team.squad.map(p => `<span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs"> \){p}</span>`).join('')}
-                        </div>
+                        <div class="flex flex-wrap gap-1.5">\( {t.squad.map(p => `<span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs"> \){p}</span>`).join('')}</div>
                     </div>
-                    <div class="text-xs text-slate-300 border-t border-slate-700 pt-3">
-                        <span class="font-medium text-emerald-400">Did you know?</span><br>${team.fact}
-                    </div>
+                    <div class="text-xs text-slate-300 border-t border-slate-700 pt-3"><span class="font-medium text-emerald-400">Did you know?</span><br>${t.fact}</div>
                 `;
-                container.appendChild(div);
+                c.appendChild(d);
             });
         }
 
         function renderLegends() {
-            const container = document.getElementById('legends-grid');
-            container.innerHTML = '';
-            legends.forEach(legend => {
-                const div = document.createElement('div');
-                div.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex gap-4 card-hover`;
-                div.innerHTML = `
-                    <img src="\( {legend.flag}" class="w-14 h-10 object-cover rounded-xl border border-slate-600 flex-shrink-0" alt=" \){legend.country} flag">
+            const c = document.getElementById('legends-grid');
+            c.innerHTML = '';
+            legends.forEach(l => {
+                const d = document.createElement('div');
+                d.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex gap-4 card-hover`;
+                d.innerHTML = `
+                    <img src="${l.flag}" class="w-14 h-10 object-cover rounded-xl border border-slate-600 flex-shrink-0">
                     <div>
-                        <div class="font-semibold text-xl">${legend.name}</div>
-                        <div class="text-emerald-400 text-sm">${legend.country}</div>
-                        <div class="mt-1 text-sm text-slate-300">${legend.achievement}</div>
+                        <div class="font-semibold text-xl">${l.name}</div>
+                        <div class="text-emerald-400 text-sm">${l.country}</div>
+                        <div class="mt-1 text-sm text-slate-300">${l.achievement}</div>
                     </div>
                 `;
-                container.appendChild(div);
+                c.appendChild(d);
             });
         }
 
         function renderSchedule() {
-            const container = document.getElementById('schedule-list');
+            const c = document.getElementById('schedule-list');
             const matches = [
                 { date: "Jun 11", time: "15:00", home: "Mexico", away: "South Africa", venue: "Mexico City" },
                 { date: "Jun 11", time: "21:00", home: "Korea Republic", away: "Czechia", venue: "Guadalajara" },
                 { date: "Jun 12", time: "15:00", home: "Canada", away: "Bosnia", venue: "Toronto" },
                 { date: "Jun 12", time: "20:00", home: "United States", away: "Paraguay", venue: "Los Angeles" }
             ];
-            container.innerHTML = '';
+            c.innerHTML = '';
             matches.forEach(m => {
-                const div = document.createElement('div');
-                div.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex justify-between items-center card-hover`;
-                div.innerHTML = `
+                const d = document.createElement('div');
+                d.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex justify-between items-center card-hover`;
+                d.innerHTML = `
                     <div>
                         <div class="font-medium">${m.home} <span class="text-emerald-400">vs</span> ${m.away}</div>
                         <div class="text-xs text-slate-400">${m.date} • ${m.time} • ${m.venue}</div>
                     </div>
                     <div class="text-xs px-3 py-1 bg-emerald-900 text-emerald-300 rounded-2xl">UPCOMING</div>
                 `;
-                container.appendChild(div);
+                c.appendChild(d);
             });
         }
 
@@ -286,7 +222,7 @@
             const target = document.getElementById(`section-${tab}`);
             if (target) target.classList.add('active');
 
-            document.querySelectorAll('.nav-bottom-btn').forEach(b => b.classList.remove('text-emerald-400'));
+            document.querySelectorAll('.nav-bottom-btn, button[id^="nav-"]').forEach(b => b.classList.remove('text-emerald-400'));
             const active = document.getElementById(`nav-${tab}`);
             if (active) active.classList.add('text-emerald-400');
         }
@@ -297,7 +233,7 @@
             renderLegends();
             renderSchedule();
             document.getElementById('section-home').classList.add('active');
-            console.log('%c[World Cup 2026] V2.1 with real images loaded', 'color:#00a651');
+            console.log('%c[V2.2] App loaded successfully', 'color:#00a651');
         }
 
         window.onload = init;
