@@ -9,10 +9,8 @@
     <style>
         body { font-family: 'Inter', system_ui, sans-serif; }
         .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
-        .section { display: none; }
-        .section.active { display: block; }
-        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-hover:hover { transform: translateY(-4px); }
+        .card { transition: all 0.3s ease; }
+        .card:hover { transform: translateY(-4px); }
     </style>
 </head>
 <body class="bg-[#0a0f1e] text-slate-200">
@@ -56,71 +54,137 @@
         </div>
     </div>
 
-    <!-- Bottom Nav -->
-    <div class="fixed bottom-0 left-0 right-0 bg-[#121a2e] border-t border-slate-700 z-50 md:hidden">
-        <div class="flex justify-around py-2 text-xs">
-            <button onclick="switchTab('home')" class="flex flex-col items-center px-4 py-1 text-emerald-400" id="nav-home">
-                <i class="fa-solid fa-home text-lg"></i><span>Home</span>
-            </button>
-            <button onclick="switchTab('schedule')" class="flex flex-col items-center px-4 py-1" id="nav-schedule">
-                <i class="fa-solid fa-calendar text-lg"></i><span>Schedule</span>
-            </button>
-            <button onclick="switchTab('teams')" class="flex flex-col items-center px-4 py-1" id="nav-teams">
-                <i class="fa-solid fa-users text-lg"></i><span>Teams</span>
-            </button>
-            <button onclick="switchTab('legends')" class="flex flex-col items-center px-4 py-1" id="nav-legends">
-                <i class="fa-solid fa-star text-lg"></i><span>Legends</span>
-            </button>
+    <!-- Stats -->
+    <div class="max-w-7xl mx-auto px-4 pb-8">
+        <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6">
+            <h3 class="font-semibold mb-4">By The Numbers</h3>
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div><div class="text-4xl font-bold text-emerald-400">48</div><div class="text-xs">Teams</div></div>
+                <div><div class="text-4xl font-bold text-emerald-400">104</div><div class="text-xs">Matches</div></div>
+                <div><div class="text-4xl font-bold text-emerald-400">16</div><div class="text-xs">Venues</div></div>
+            </div>
         </div>
     </div>
 
-    <!-- Content -->
-    <div class="max-w-7xl mx-auto px-4 pb-24">
+    <!-- Schedule -->
+    <div class="max-w-7xl mx-auto px-4 pb-8">
+        <h3 class="font-semibold text-xl mb-4">Upcoming Matches</h3>
+        <div class="space-y-3">
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex justify-between items-center">
+                <div>
+                    <div class="font-medium">Mexico <span class="text-emerald-400">vs</span> South Africa</div>
+                    <div class="text-xs text-slate-400">Jun 11 • 15:00 • Mexico City</div>
+                </div>
+                <div class="text-xs px-3 py-1 bg-emerald-900 text-emerald-300 rounded-2xl">UPCOMING</div>
+            </div>
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex justify-between items-center">
+                <div>
+                    <div class="font-medium">United States <span class="text-emerald-400">vs</span> Paraguay</div>
+                    <div class="text-xs text-slate-400">Jun 12 • 20:00 • Los Angeles</div>
+                </div>
+                <div class="text-xs px-3 py-1 bg-emerald-900 text-emerald-300 rounded-2xl">UPCOMING</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teams -->
+    <div class="max-w-7xl mx-auto px-4 pb-8">
+        <h3 class="font-semibold text-xl mb-4">Teams • Squads &amp; Facts</h3>
         
-        <!-- HOME -->
-        <div id="section-home" class="section active">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6">
-                    <h3 class="font-semibold mb-4">By The Numbers</h3>
-                    <div class="grid grid-cols-3 gap-4 text-center">
-                        <div><div class="text-4xl font-bold text-emerald-400">48</div><div class="text-xs">Teams</div></div>
-                        <div><div class="text-4xl font-bold text-emerald-400">104</div><div class="text-xs">Matches</div></div>
-                        <div><div class="text-4xl font-bold text-emerald-400">16</div><div class="text-xs">Venues</div></div>
+        <div class="space-y-4">
+            <!-- Mexico -->
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-5">
+                <div class="flex items-center gap-x-4 mb-4">
+                    <img src="https://flagcdn.com/w160/mx.png" class="w-16 h-11 object-cover rounded-xl border border-slate-600">
+                    <div>
+                        <div class="font-semibold text-2xl">Mexico</div>
+                        <div class="text-emerald-400 text-sm">Group A</div>
                     </div>
                 </div>
-
-                <div class="bg-gradient-to-br from-amber-900/30 to-[#1a2338] border border-amber-700/50 rounded-3xl p-6">
-                    <div class="flex items-center gap-x-3 mb-3">
-                        <i class="fa-solid fa-tachometer-alt text-amber-400 text-2xl"></i>
-                        <div>
-                            <div class="font-semibold">Prediction Game</div>
-                            <div class="text-xs text-amber-300">Coming June 2026</div>
-                        </div>
+                <div class="mb-3">
+                    <div class="text-xs text-slate-400 mb-1">KEY PLAYERS</div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Chicharito</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Tecatito</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Guardado</span>
                     </div>
-                    <p class="text-sm text-slate-300">Lock your predictions and compete for points.</p>
-                    <button onclick="alert('Coming in V3.0!')" class="mt-4 w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-black font-semibold rounded-3xl text-sm">Join Waitlist</button>
+                </div>
+                <div class="text-xs text-slate-300 border-t border-slate-700 pt-3">
+                    <span class="font-medium text-emerald-400">Did you know?</span><br>
+                    Hosts for the third time. Last hosted in 1986.
+                </div>
+            </div>
+
+            <!-- Brazil -->
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-5">
+                <div class="flex items-center gap-x-4 mb-4">
+                    <img src="https://flagcdn.com/w160/br.png" class="w-16 h-11 object-cover rounded-xl border border-slate-600">
+                    <div>
+                        <div class="font-semibold text-2xl">Brazil</div>
+                        <div class="text-emerald-400 text-sm">Group C</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="text-xs text-slate-400 mb-1">KEY PLAYERS</div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Vinícius Jr</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Rodrygo</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Casemiro</span>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-300 border-t border-slate-700 pt-3">
+                    <span class="font-medium text-emerald-400">Did you know?</span><br>
+                    5-time champions. Most successful nation in World Cup history.
+                </div>
+            </div>
+
+            <!-- Argentina -->
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-5">
+                <div class="flex items-center gap-x-4 mb-4">
+                    <img src="https://flagcdn.com/w160/ar.png" class="w-16 h-11 object-cover rounded-xl border border-slate-600">
+                    <div>
+                        <div class="font-semibold text-2xl">Argentina</div>
+                        <div class="text-emerald-400 text-sm">Group K</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="text-xs text-slate-400 mb-1">KEY PLAYERS</div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Messi</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Di María</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs">Martínez</span>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-300 border-t border-slate-700 pt-3">
+                    <span class="font-medium text-emerald-400">Did you know?</span><br>
+                    Defending champions (2022 winners).
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- SCHEDULE -->
-        <div id="section-schedule" class="section">
-            <h3 class="font-semibold text-xl mb-4">Upcoming Matches</h3>
-            <div id="schedule-list" class="space-y-3"></div>
+    <!-- Legends -->
+    <div class="max-w-7xl mx-auto px-4 pb-12">
+        <h3 class="font-semibold text-xl mb-4">World Cup Legends</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-5 flex gap-4 card">
+                <img src="https://flagcdn.com/w160/ar.png" class="w-14 h-10 object-cover rounded-xl border border-slate-600 flex-shrink-0">
+                <div>
+                    <div class="font-semibold text-xl">Lionel Messi</div>
+                    <div class="text-emerald-400 text-sm">Argentina</div>
+                    <div class="mt-1 text-sm text-slate-300">2022 World Cup Winner</div>
+                </div>
+            </div>
+            
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-5 flex gap-4 card">
+                <img src="https://flagcdn.com/w160/fr.png" class="w-14 h-10 object-cover rounded-xl border border-slate-600 flex-shrink-0">
+                <div>
+                    <div class="font-semibold text-xl">Kylian Mbappé</div>
+                    <div class="text-emerald-400 text-sm">France</div>
+                    <div class="mt-1 text-sm text-slate-300">2022 Golden Boot Winner</div>
+                </div>
+            </div>
         </div>
-
-        <!-- TEAMS -->
-        <div id="section-teams" class="section">
-            <h3 class="font-semibold text-xl mb-4">Teams • Squads &amp; Facts</h3>
-            <div id="teams-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-        </div>
-
-        <!-- LEGENDS -->
-        <div id="section-legends" class="section">
-            <h3 class="font-semibold text-xl mb-4">World Cup Legends</h3>
-            <div id="legends-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        </div>
-
     </div>
 
     <script>
@@ -136,107 +200,15 @@
                 el.innerHTML = `${d}d ${h}h ${m}m`;
             }, 30000);
         }
-
-        const teams = [
-            { name: "Mexico", group: "A", flag: "https://flagcdn.com/w160/mx.png", squad: ["Chicharito", "Tecatito", "Guardado", "Pineda"], fact: "Hosts for the third time." },
-            { name: "Brazil", group: "C", flag: "https://flagcdn.com/w160/br.png", squad: ["Vinícius Jr", "Rodrygo", "Casemiro", "Alisson"], fact: "5-time champions." },
-            { name: "Argentina", group: "K", flag: "https://flagcdn.com/w160/ar.png", squad: ["Messi", "Di María", "Martínez", "Otamendi"], fact: "Defending champions (2022)." },
-            { name: "France", group: "J", flag: "https://flagcdn.com/w160/fr.png", squad: ["Mbappé", "Griezmann", "Pogba", "Lloris"], fact: "Back-to-back finalists." },
-            { name: "United States", group: "D", flag: "https://flagcdn.com/w160/us.png", squad: ["Pulisic", "Weah", "Adams", "Turner"], fact: "Co-hosts for the first time." }
-        ];
-
-        const legends = [
-            { name: "Lionel Messi", country: "Argentina", achievement: "2022 World Cup Winner", flag: "https://flagcdn.com/w160/ar.png" },
-            { name: "Kylian Mbappé", country: "France", achievement: "2022 Golden Boot", flag: "https://flagcdn.com/w160/fr.png" },
-            { name: "Vinícius Júnior", country: "Brazil", achievement: "Global Superstar", flag: "https://flagcdn.com/w160/br.png" },
-            { name: "Christian Pulisic", country: "USA", achievement: "USMNT Captain", flag: "https://flagcdn.com/w160/us.png" }
-        ];
-
-        function renderTeams() {
-            const c = document.getElementById('teams-grid');
-            c.innerHTML = '';
-            teams.forEach(t => {
-                const d = document.createElement('div');
-                d.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-5 card-hover`;
-                d.innerHTML = `
-                    <div class="flex items-center gap-x-4 mb-4">
-                        <img src="${t.flag}" class="w-16 h-11 object-cover rounded-xl border border-slate-600" alt="">
-                        <div>
-                            <div class="font-semibold text-2xl">${t.name}</div>
-                            <div class="text-emerald-400 text-sm">Group ${t.group}</div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="text-xs text-slate-400 mb-1">KEY PLAYERS</div>
-                        <div class="flex flex-wrap gap-1.5">\( {t.squad.map(p => `<span class="px-3 py-1 bg-slate-800 rounded-2xl text-xs"> \){p}</span>`).join('')}</div>
-                    </div>
-                    <div class="text-xs text-slate-300 border-t border-slate-700 pt-3"><span class="font-medium text-emerald-400">Did you know?</span><br>${t.fact}</div>
-                `;
-                c.appendChild(d);
-            });
+        
+        function showInstallPrompt() {
+            alert("On Pixel: Tap the three dots → Install app");
         }
-
-        function renderLegends() {
-            const c = document.getElementById('legends-grid');
-            c.innerHTML = '';
-            legends.forEach(l => {
-                const d = document.createElement('div');
-                d.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex gap-4 card-hover`;
-                d.innerHTML = `
-                    <img src="${l.flag}" class="w-14 h-10 object-cover rounded-xl border border-slate-600 flex-shrink-0">
-                    <div>
-                        <div class="font-semibold text-xl">${l.name}</div>
-                        <div class="text-emerald-400 text-sm">${l.country}</div>
-                        <div class="mt-1 text-sm text-slate-300">${l.achievement}</div>
-                    </div>
-                `;
-                c.appendChild(d);
-            });
-        }
-
-        function renderSchedule() {
-            const c = document.getElementById('schedule-list');
-            const matches = [
-                { date: "Jun 11", time: "15:00", home: "Mexico", away: "South Africa", venue: "Mexico City" },
-                { date: "Jun 11", time: "21:00", home: "Korea Republic", away: "Czechia", venue: "Guadalajara" },
-                { date: "Jun 12", time: "15:00", home: "Canada", away: "Bosnia", venue: "Toronto" },
-                { date: "Jun 12", time: "20:00", home: "United States", away: "Paraguay", venue: "Los Angeles" }
-            ];
-            c.innerHTML = '';
-            matches.forEach(m => {
-                const d = document.createElement('div');
-                d.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex justify-between items-center card-hover`;
-                d.innerHTML = `
-                    <div>
-                        <div class="font-medium">${m.home} <span class="text-emerald-400">vs</span> ${m.away}</div>
-                        <div class="text-xs text-slate-400">${m.date} • ${m.time} • ${m.venue}</div>
-                    </div>
-                    <div class="text-xs px-3 py-1 bg-emerald-900 text-emerald-300 rounded-2xl">UPCOMING</div>
-                `;
-                c.appendChild(d);
-            });
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(`section-${tab}`);
-            if (target) target.classList.add('active');
-
-            document.querySelectorAll('.nav-bottom-btn, button[id^="nav-"]').forEach(b => b.classList.remove('text-emerald-400'));
-            const active = document.getElementById(`nav-${tab}`);
-            if (active) active.classList.add('text-emerald-400');
-        }
-
-        function init() {
+        
+        window.onload = function() {
             startCountdown();
-            renderTeams();
-            renderLegends();
-            renderSchedule();
-            document.getElementById('section-home').classList.add('active');
-            console.log('%c[V2.2] App loaded successfully', 'color:#00a651');
+            console.log('%c[V2.3] Simple version loaded successfully', 'color:#00a651');
         }
-
-        window.onload = init;
     </script>
 </body>
 </html>
