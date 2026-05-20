@@ -9,8 +9,6 @@
     <style>
         body { font-family: 'Inter', system_ui, sans-serif; }
         .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
-        .section { display: none; }
-        .section.active { display: block; }
         .modal { animation: fadeIn 0.2s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -67,8 +65,8 @@
     <!-- Search -->
     <div class="max-w-7xl mx-auto px-4 pb-6">
         <div class="relative max-w-md mx-auto">
-            <input type="text" id="search-input" placeholder="Search teams, players or groups..." 
-                   onkeyup="filterAll()" class="w-full bg-[#121a2e] border border-slate-700 focus:border-emerald-600 rounded-3xl pl-12 py-3 outline-none">
+            <input type="text" id="search-input" placeholder="Search teams or players..." 
+                   onkeyup="filterContent()" class="w-full bg-[#121a2e] border border-slate-700 focus:border-emerald-600 rounded-3xl pl-12 py-3 outline-none">
             <i class="fa-solid fa-search absolute left-5 top-4 text-slate-400"></i>
         </div>
     </div>
@@ -76,19 +74,9 @@
     <!-- Content -->
     <div class="max-w-7xl mx-auto px-4 pb-24">
         
-        <!-- Quick Stats -->
-        <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6 mb-8">
-            <h3 class="font-semibold mb-4">By The Numbers</h3>
-            <div class="grid grid-cols-3 gap-4 text-center">
-                <div><div class="text-4xl font-bold text-emerald-400">48</div><div class="text-xs">Teams</div></div>
-                <div><div class="text-4xl font-bold text-emerald-400">104</div><div class="text-xs">Matches</div></div>
-                <div><div class="text-4xl font-bold text-emerald-400">16</div><div class="text-xs">Venues</div></div>
-            </div>
-        </div>
-
         <!-- Groups -->
         <div class="mb-8">
-            <h3 class="font-semibold text-xl mb-4">Groups</h3>
+            <h3 class="font-semibold text-xl mb-4">All Groups (Click for Standings)</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="groups-container"></div>
         </div>
 
@@ -106,18 +94,20 @@
 
         <!-- Super Stars -->
         <div class="mb-8">
-            <h3 class="font-semibold text-xl mb-4">Super Stars (Click for details)</h3>
+            <h3 class="font-semibold text-xl mb-4">Super Stars (Click for Details)</h3>
             <div id="stars-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
         <!-- Bracket -->
         <div>
             <h3 class="font-semibold text-xl mb-4">World Cup Bracket</h3>
-            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6 text-center">
-                <div class="text-emerald-400 mb-2">Knockout Stage</div>
-                <div class="text-sm">Round of 32 → Round of 16 → Quarterfinals → Semifinals → Final (July 19, New York)</div>
-                <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums" target="_blank" 
-                   class="inline-block mt-4 text-emerald-400 hover:underline text-sm">View Full Official Bracket →</a>
+            <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6">
+                <div class="text-center">
+                    <div class="text-emerald-400 mb-2">Knockout Stage</div>
+                    <div class="text-sm">Round of 32 → Round of 16 → Quarterfinals → Semifinals → Final (July 19)</div>
+                    <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums" target="_blank" 
+                       class="inline-block mt-4 text-emerald-400 hover:underline">View Full Official Bracket →</a>
+                </div>
             </div>
         </div>
 
@@ -125,264 +115,20 @@
 
     <!-- Modal -->
     <div id="modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/70 flex items-end md:items-center justify-center z-[100]">
-        <div onclick="event.stopImmediatePropagation()" class="bg-[#121a2e] border border-slate-700 w-full md:w-[460px] rounded-t-3xl md:rounded-3xl p-6 max-h-[85vh] overflow-auto">
+        <div onclick="event.stopImmediatePropagation()" class="bg-[#121a2e] border border-slate-700 w-full md:w-[480px] rounded-t-3xl md:rounded-3xl p-6 max-h-[85vh] overflow-auto">
             <div id="modal-content"></div>
             <button onclick="closeModal()" class="mt-5 w-full py-3 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 rounded-3xl">Close</button>
         </div>
     </div>
 
     <script>
-        // Data
+        // Full Groups Data with Standings
         const groups = [
-            { name: "A", teams: ["Mexico", "South Africa", "Korea Republic", "Czechia"] },
-            { name: "B", teams: ["Canada", "Bosnia and Herzegovina", "Qatar", "Switzerland"] },
-            { name: "C", teams: ["Brazil", "Morocco", "Haiti", "Scotland"] },
-            { name: "D", teams: ["United States", "Paraguay", "Australia", "Türkiye"] },
-            { name: "E", teams: ["Germany", "Curaçao", "Côte d’Ivoire", "Ecuador"] },
-            { name: "F", teams: ["Netherlands", "Japan", "Tunisia", "Sweden"] },
-            { name: "G", teams: ["Belgium", "Egypt", "Iran", "New Zealand"] },
-            { name: "H", teams: ["Spain", "Cabo Verde", "Saudi Arabia", "Uruguay"] }
-        ];
-
-        const teamsData = [
-            { id: 1, name: "Mexico", group: "A", flag: "https://flagcdn.com/w160/mx.png", anecdote: "Mexico is famous for its vibrant culture, tacos, and passionate football fans. The team plays with incredible heart and home support.", mainPlayers: [
-                { name: "Hirving Lozano", stats: "50+ caps • 15 goals • Key winger for PSV" },
-                { name: "Raúl Jiménez", stats: "100+ caps • 30+ goals • Premier League experience" },
-                { name: "Edson Álvarez", stats: "60+ caps • Defensive midfield anchor at West Ham" }
+            { name: "A", standings: [
+                { team: "Mexico", pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+                { team: "South Africa", pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+                { team: "Korea Republic", pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 },
+                { team: "Czechia", pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 }
             ]},
-            { id: 2, name: "Brazil", group: "C", flag: "https://flagcdn.com/w160/br.png", anecdote: "Brazil is the most successful nation in World Cup history with 5 titles. Football is a religion here — 'Jogo Bonito' lives on.", mainPlayers: [
-                { name: "Vinícius Júnior", stats: "30+ caps • Champions League winner • Ballon d'Or contender" },
-                { name: "Rodrygo", stats: "25+ caps • Real Madrid star • 20+ goals per season" },
-                { name: "Casemiro", stats: "70+ caps • 3x Champions League winner • Defensive rock" }
-            ]},
-            { id: 3, name: "Argentina", group: "K", flag: "https://flagcdn.com/w160/ar.png", anecdote: "Argentina is known for passion, tango, and producing legends like Maradona and Messi. The country lives and breathes football.", mainPlayers: [
-                { name: "Lionel Messi", stats: "8x Ballon d'Or • 2022 World Cup Winner • 800+ career goals" },
-                { name: "Ángel Di María", stats: "140+ caps • Key in 2022 World Cup triumph" },
-                { name: "Emiliano Martínez", stats: "Golden Glove 2022 • World Cup hero" }
-            ]},
-            { id: 4, name: "France", group: "J", flag: "https://flagcdn.com/w160/fr.png", anecdote: "France combines elegance with power. Known for wine, fashion, and producing world-class talent.", mainPlayers: [
-                { name: "Kylian Mbappé", stats: "2022 Golden Boot • 50+ international goals • Fastest to 50 goals for France" },
-                { name: "Antoine Griezmann", stats: "130+ caps • 2018 World Cup winner • Creative genius" },
-                { name: "Paul Pogba", stats: "World Cup winner • 2x Serie A champion" }
-            ]},
-            { id: 5, name: "United States", group: "D", flag: "https://flagcdn.com/w160/us.png", anecdote: "The USA is a melting pot of cultures and is rapidly growing as a football nation. 'Soccer' is becoming mainstream.", mainPlayers: [
-                { name: "Christian Pulisic", stats: "60+ caps • Captain • Chelsea & AC Milan star" },
-                { name: "Timothy Weah", stats: "30+ caps • Juventus winger • Son of legend George Weah" },
-                { name: "Tyler Adams", stats: "40+ caps • Defensive midfielder at Bournemouth" }
-            ]}
-        ];
-
-        const starsData = [
-            { id: 1, name: "Lionel Messi", country: "Argentina", flag: "https://flagcdn.com/w160/ar.png", photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Lionel_Messi_20180626.jpg/440px-Lionel_Messi_20180626.jpg", stats: "8x Ballon d'Or • 2022 World Cup Winner • 800+ career goals • Inter Miami star", anecdote: "Messi's journey from Rosario to global icon is one of the greatest sports stories ever told." },
-            { id: 2, name: "Kylian Mbappé", country: "France", flag: "https://flagcdn.com/w160/fr.png", photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Kylian_Mbapp%C3%A9_2018.jpg/440px-Kylian_Mbapp%C3%A9_2018.jpg", stats: "2022 Golden Boot • 50+ international goals • 3x Ligue 1 Player of the Year", anecdote: "Mbappé broke Pelé's record as the youngest player to score in a World Cup final." },
-            { id: 3, name: "Vinícius Júnior", country: "Brazil", flag: "https://flagcdn.com/w160/br.png", photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Vinicius_Jr_2023.jpg/440px-Vinicius_Jr_2023.jpg", stats: "30+ caps • Champions League winner • 50+ goals for Real Madrid", anecdote: "Vinícius is carrying the torch of Brazilian flair into a new generation." }
-        ];
-
-        const scheduleData = [
-            { date: "Jun 11", time: "15:00", home: "Mexico", away: "South Africa", venue: "Estadio Azteca, Mexico City", group: "A" },
-            { date: "Jun 11", time: "21:00", home: "Korea Republic", away: "Czechia", venue: "Estadio Akron, Guadalajara", group: "A" },
-            { date: "Jun 12", time: "15:00", home: "Canada", away: "Bosnia and Herzegovina", venue: "BMO Field, Toronto", group: "B" },
-            { date: "Jun 12", time: "20:00", home: "United States", away: "Paraguay", venue: "SoFi Stadium, Los Angeles", group: "D" },
-            { date: "Jun 13", time: "13:00", home: "Brazil", away: "Morocco", venue: "MetLife Stadium, New York", group: "C" }
-        ];
-
-        function renderGroups() {
-            const container = document.getElementById('groups-container');
-            container.innerHTML = '';
-            groups.forEach(g => {
-                const div = document.createElement('div');
-                div.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 cursor-pointer hover:border-emerald-600`;
-                div.onclick = () => showGroupModal(g);
-                div.innerHTML = `
-                    <div class="font-semibold text-xl">Group ${g.name}</div>
-                    <div class="text-xs text-slate-400 mt-1">${g.teams.join(" • ")}</div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function renderTeams() {
-            const container = document.getElementById('teams-container');
-            container.innerHTML = '';
-            teamsData.forEach(team => {
-                const div = document.createElement('div');
-                div.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-5 cursor-pointer hover:border-emerald-600`;
-                div.onclick = () => showTeamModal(team);
-                div.innerHTML = `
-                    <div class="flex items-center gap-x-4 mb-4">
-                        <img src="${team.flag}" class="w-16 h-11 object-cover rounded-xl border border-slate-600">
-                        <div>
-                            <div class="font-semibold text-2xl">${team.name}</div>
-                            <div class="text-emerald-400 text-sm">Group ${team.group}</div>
-                        </div>
-                    </div>
-                    <div class="text-xs text-slate-300 border-t border-slate-700 pt-3">
-                        <span class="font-medium text-emerald-400">Cultural Note:</span><br>${team.anecdote}
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function renderStars() {
-            const container = document.getElementById('stars-container');
-            container.innerHTML = '';
-            starsData.forEach(star => {
-                const div = document.createElement('div');
-                div.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-5 cursor-pointer hover:border-emerald-600`;
-                div.onclick = () => showStarModal(star);
-                div.innerHTML = `
-                    <div class="flex items-center gap-x-4">
-                        <img src="${star.flag}" class="w-14 h-10 object-cover rounded-xl border border-slate-600">
-                        <div>
-                            <div class="font-semibold text-xl">${star.name}</div>
-                            <div class="text-emerald-400 text-sm">${star.country}</div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function renderSchedule() {
-            const container = document.getElementById('schedule-container');
-            container.innerHTML = '';
-            scheduleData.forEach(match => {
-                const div = document.createElement('div');
-                div.className = `bg-[#121a2e] border border-slate-700 rounded-3xl p-4 flex justify-between items-center`;
-                div.innerHTML = `
-                    <div>
-                        <div class="font-medium">${match.home} <span class="text-emerald-400">vs</span> ${match.away}</div>
-                        <div class="text-xs text-slate-400">${match.date} • ${match.time} • ${match.venue}</div>
-                    </div>
-                    <div class="text-xs px-3 py-1 bg-emerald-900 text-emerald-300 rounded-2xl">Group ${match.group}</div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function showTeamModal(team) {
-            const modal = document.getElementById('modal');
-            const content = document.getElementById('modal-content');
-            content.innerHTML = `
-                <div class="flex items-center gap-x-4 mb-6">
-                    <img src="${team.flag}" class="w-24 h-16 object-cover rounded-2xl border-4 border-emerald-600">
-                    <div>
-                        <div class="font-semibold text-4xl">${team.name}</div>
-                        <div class="text-emerald-400 text-lg">Group ${team.group}</div>
-                    </div>
-                </div>
-                
-                <div class="mb-6">
-                    <div class="font-medium text-emerald-400 mb-2">Cultural Anecdote</div>
-                    <div class="text-slate-300">${team.anecdote}</div>
-                </div>
-                
-                <div>
-                    <div class="font-medium text-emerald-400 mb-3">Main Players & Career Stats</div>
-                    ${team.mainPlayers.map(p => `
-                        <div class="mb-4 p-3 bg-[#0a0f1e] rounded-2xl">
-                            <div class="font-semibold">${p.name}</div>
-                            <div class="text-sm text-slate-300">${p.stats}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function showStarModal(star) {
-            const modal = document.getElementById('modal');
-            const content = document.getElementById('modal-content');
-            content.innerHTML = `
-                <div class="text-center mb-6">
-                    <img src="\( {star.photo}" class="w-48 h-48 object-cover rounded-3xl mx-auto border-4 border-emerald-600 mb-4" alt=" \){star.name}">
-                    <div class="font-semibold text-4xl">${star.name}</div>
-                    <div class="text-emerald-400">${star.country}</div>
-                </div>
-                
-                <div class="mb-6">
-                    <div class="font-medium text-emerald-400 mb-2">Career Highlights</div>
-                    <div class="text-slate-300">${star.stats}</div>
-                </div>
-                
-                <div>
-                    <div class="font-medium text-emerald-400 mb-2">Personal Story</div>
-                    <div class="text-slate-300">${star.anecdote}</div>
-                </div>
-            `;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function showGroupModal(group) {
-            const modal = document.getElementById('modal');
-            const content = document.getElementById('modal-content');
-            const groupTeams = teamsData.filter(t => t.group === group.name);
-            
-            content.innerHTML = `
-                <div class="mb-6">
-                    <div class="font-semibold text-4xl mb-1">Group ${group.name}</div>
-                    <div class="text-emerald-400">4 teams • 6 matches each</div>
-                </div>
-                
-                <div class="space-y-4">
-                    ${groupTeams.map(team => `
-                        <div onclick="showTeamModal(teamsData.find(t => t.id === ${team.id})); closeModal();" class="flex items-center gap-x-4 p-3 bg-[#0a0f1e] rounded-2xl cursor-pointer hover:bg-slate-800">
-                            <img src="${team.flag}" class="w-14 h-10 object-cover rounded-xl border border-slate-600">
-                            <div class="flex-1">
-                                <div class="font-semibold">${team.name}</div>
-                                <div class="text-xs text-slate-400">${team.anecdote.substring(0, 60)}...</div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function filterAll() {
-            const term = document.getElementById('search-input').value.toLowerCase();
-            document.querySelectorAll('#teams-container > div, #stars-container > div').forEach(el => {
-                el.style.display = el.textContent.toLowerCase().includes(term) ? '' : 'none';
-            });
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-        }
-
-        function startCountdown() {
-            const el = document.getElementById('countdown');
-            const target = new Date('2026-06-11T15:00:00-04:00').getTime();
-            setInterval(() => {
-                const diff = target - Date.now();
-                if (diff < 0) { el.innerHTML = "It's Match Day!"; return; }
-                const d = Math.floor(diff / 86400000);
-                const h = Math.floor((diff % 86400000) / 3600000);
-                const m = Math.floor((diff % 3600000) / 60000);
-                el.innerHTML = `${d}d ${h}h ${m}m`;
-            }, 30000);
-        }
-
-        function showInstallPrompt() {
-            alert("On Pixel: Tap the three dots → Install app");
-        }
-
-        function init() {
-            startCountdown();
-            renderGroups();
-            renderTeams();
-            renderStars();
-            renderSchedule();
-            console.log('%c[World Cup 2026] Version 4.0 loaded successfully', 'color:#00a651');
-        }
-
-        window.onload = init;
-    </script>
-</body>
-</html>
+            { name: "B", standings: [
+                { team: "Canada", pld: 0, w: 0, d:
