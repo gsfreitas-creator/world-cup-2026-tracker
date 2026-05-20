@@ -246,4 +246,64 @@
             
             content.innerHTML = `
                 <div class="mb-6">
-                    <div class="font-semibold text-3xl mb
+                    <div class="font-semibold text-3xl mb-1">Group ${group}</div>
+                    <div class="text-emerald-400">4 teams • 6 matches</div>
+                </div>
+                <div class="space-y-4">
+                    ${groupTeams.map(team => `
+                        <div class="flex items-center gap-x-4 p-3 bg-[#0a0f1e] rounded-2xl">
+                            <img src="${team.flag}" class="w-14 h-10 object-cover rounded-xl border border-slate-600">
+                            <div class="flex-1">
+                                <div class="font-semibold">${team.name}</div>
+                                <div class="text-xs text-slate-400">${team.fact}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function filterContent() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            document.querySelectorAll('#teams-container > div, #stars-container > div').forEach(el => {
+                const text = el.textContent.toLowerCase();
+                el.style.display = text.includes(term) ? '' : 'none';
+            });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        function startCountdown() {
+            const el = document.getElementById('countdown');
+            const target = new Date('2026-06-11T15:00:00-04:00').getTime();
+            setInterval(() => {
+                const diff = target - Date.now();
+                if (diff < 0) { el.innerHTML = "It's Match Day!"; return; }
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                el.innerHTML = `${d}d ${h}h ${m}m`;
+            }, 30000);
+        }
+
+        function showInstallPrompt() {
+            alert("On Pixel: Tap the three dots → Install app");
+        }
+
+        function init() {
+            startCountdown();
+            renderTeams();
+            renderStars();
+            console.log('%c[World Cup 2026] Version 3.0 loaded successfully', 'color:#00a651');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
