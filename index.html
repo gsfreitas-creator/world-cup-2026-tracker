@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Cup 2026 • Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
+        .soccer-green { color: #00a651; }
+        .match-card { transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .match-card:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .nav-tab { position: relative; transition: all 0.2s ease; }
+        .nav-tab.active { color: white; background-color: #00a651; }
+        .nav-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: white; border-radius: 9999px; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .team-flag { font-size: 1.75rem; line-height: 1; }
+        .worldcup-bg { background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%); }
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); }
+        .stat-value { font-size: 2rem; line-height: 1; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 worldcup-bg">
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-10 h-10 bg-emerald-600 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-trophy text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-display text-2xl font-semibold tracking-tighter">World Cup 2026</h1>
+                        <p class="text-[10px] text-emerald-400 -mt-1">CAN • MEX • USA</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-x-2">
+                    <div class="hidden sm:flex items-center bg-slate-900 border border-slate-700 rounded-3xl px-2.5 py-1 text-[10px]">
+                        <div class="flex items-center gap-x-1.5">
+                            <div class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
+                            <span class="text-emerald-400">LIVE UPDATES</span>
+                        </div>
+                    </div>
+                    <button onclick="refreshData()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-3xl text-xs font-medium flex items-center gap-x-1.5">
+                        <i class="fa-solid fa-sync-alt text-emerald-400"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 pt-6 pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+            <div>
+                <div class="inline-flex items-center gap-x-2 px-3 py-1 rounded-3xl bg-emerald-950 border border-emerald-900 text-emerald-400 text-xs font-medium mb-2">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>48 TEAMS • 104 MATCHES • JUNE 11 – JULY 19</span>
+                </div>
+                <h2 class="font-display text-4xl font-semibold tracking-tighter">The biggest World Cup ever</h2>
+            </div>
+            <button onclick="showInstallPrompt()" class="px-5 py-2.5 bg-white text-slate-950 hover:bg-amber-50 font-semibold rounded-3xl flex items-center justify-center gap-x-2 text-sm shadow-lg active:scale-[0.985]">
+                <i class="fa-solid fa-download"></i>
+                <span>Install App</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex border-b border-slate-800 mb-5 overflow-x-auto pb-1 text-sm">
+            <button onclick="switchTab('schedule')" id="tab-schedule" class="nav-tab active flex-shrink-0 px-5 py-2.5 font-semibold flex items-center gap-x-2 rounded-t-3xl">Schedule</button>
+            <button onclick="switchTab('teams')" id="tab-teams" class="nav-tab flex-shrink-0 px-5 py-2.5 font-semibold flex items-center gap-x-2 rounded-t-3xl hover:bg-slate-900">Teams</button>
+            <button onclick="switchTab('headlines')" id="tab-headlines" class="nav-tab flex-shrink-0 px-5 py-2.5 font-semibold flex items-center gap-x-2 rounded-t-3xl hover:bg-slate-900">Headlines</button>
+            <button onclick="switchTab('stats')" id="tab-stats" class="nav-tab flex-shrink-0 px-5 py-2.5 font-semibold flex items-center gap-x-2 rounded-t-3xl hover:bg-slate-900">Stats</button>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 pb-10">
+        
+        <!-- SCHEDULE -->
+        <div id="section-schedule" class="section active">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+                <h3 class="font-semibold text-lg">Match Schedule</h3>
+                <div class="flex gap-2">
+                    <input type="text" id="schedule-search" placeholder="Search teams..." onkeyup="filterMatches()" class="flex-1 bg-slate-900 border border-slate-700 text-sm rounded-3xl px-4 py-2 outline-none">
+                    <select id="group-filter" onchange="filterMatches()" class="bg-slate-900 border border-slate-700 text-sm rounded-3xl px-3 py-2 outline-none">
+                        <option value="">All Groups</option>
+                    </select>
+                </div>
+            </div>
+            <div id="matches-container" class="grid grid-cols-1 gap-3"></div>
+        </div>
+        
+        <!-- TEAMS -->
+        <div id="section-teams" class="section">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-semibold text-lg">All 48 Teams</h3>
+                <input type="text" id="team-search" placeholder="Search..." onkeyup="filterTeams()" class="w-40 bg-slate-900 border border-slate-700 text-sm rounded-3xl px-4 py-2 outline-none">
+            </div>
+            <div id="teams-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
+        
+        <!-- HEADLINES -->
+        <div id="section-headlines" class="section">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-semibold text-lg">Latest Headlines</h3>
+                <button onclick="updateHeadlinesPrompt()" class="text-xs px-3 py-1.5 bg-slate-800 hover:bg-emerald-900 border border-slate-700 rounded-3xl text-emerald-400">Ask Grok to add more</button>
+            </div>
+            <div id="headlines-container" class="space-y-3"></div>
+        </div>
+        
+        <!-- STATS -->
+        <div id="section-stats" class="section">
+            <h3 class="font-semibold text-lg mb-3">Fun Stats</h3>
+            <div id="stats-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
+            
+            <div class="mt-6 bg-slate-900 border border-slate-700 rounded-3xl p-5 text-sm">
+                <h4 class="font-semibold mb-2 flex items-center gap-x-2"><i class="fa-solid fa-lightbulb text-amber-400"></i> Quick Facts</h4>
+                <div class="grid grid-cols-1 gap-2 text-xs text-slate-300">
+                    <div>• First World Cup with 3 host nations (Canada • Mexico • USA)</div>
+                    <div>• 48 teams — the biggest tournament in history</div>
+                    <div>• 104 matches across 39 days (June 11 – July 19)</div>
+                    <div>• New Round of 32 format: Top 2 + 8 best 3rd-placed advance</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-800 bg-slate-900 py-6 text-center text-xs text-slate-500 px-4">
+        Made for Guilherme &amp; family • Updates via Grok • Open this file anytime on your phone
+    </footer>
+
+    <script>
+        // EMBEDDED DATA (no external fetch needed - perfect for phone)
+        const data = {
+            "lastUpdated": "2026-05-19T20:30:00-05:00",
+            "tournament": {"name": "FIFA World Cup 2026™", "dates": "June 11 – July 19, 2026", "hosts": ["Canada", "Mexico", "United States"], "totalTeams": 48, "totalMatches": 104, "groupsCount": 12},
+            "groups": [
+                {"name": "Group A", "teams": ["Mexico", "South Africa", "Korea Republic", "Czechia"], "flag": "🇲🇽"},
+                {"name": "Group B", "teams": ["Canada", "Switzerland", "Qatar", "Bosnia and Herzegovina"], "flag": "🇨🇦"},
+                {"name": "Group C", "teams": ["Brazil", "Morocco", "Haiti", "Scotland"], "flag": "🇧🇷"},
+                {"name": "Group D", "teams": ["United States", "Paraguay", "Australia", "Türkiye"], "flag": "🇺🇸"},
+                {"name": "Group E", "teams": ["Germany", "Curaçao", "Côte d’Ivoire", "Ecuador"], "flag": "🇩🇪"},
+                {"name": "Group F", "teams": ["Netherlands", "Japan", "Tunisia", "Sweden"], "flag": "🇳🇱"},
+                {"name": "Group G", "teams": ["Belgium", "Egypt", "Iran", "New Zealand"], "flag": "🇧🇪"},
+                {"name": "Group H", "teams": ["Spain", "Cabo Verde", "Saudi Arabia", "Uruguay"], "flag": "🇪🇸"},
+                {"name": "Group I", "teams": ["England", "Croatia", "Serbia", "Slovenia"], "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"},
+                {"name": "Group J", "teams": ["France", "Denmark", "Peru", "Iceland"], "flag": "🇫🇷"},
+                {"name": "Group K", "teams": ["Argentina", "Colombia", "Chile", "Bolivia"], "flag": "🇦🇷"},
+                {"name": "Group L", "teams": ["Portugal", "Italy", "Greece", "Albania"], "flag": "🇵🇹"}
+            ],
+            "matches": [
+                {"id":1,"date":"2026-06-11","time":"15:00","home":"Mexico","away":"South Africa","venue":"Estadio Azteca, Mexico City","group":"Group A","status":"upcoming","score":null,"tv":"FOX / Peacock"},
+                {"id":2,"date":"2026-06-11","time":"21:00","home":"Korea Republic","away":"Czechia","venue":"Estadio Akron, Guadalajara","group":"Group A","status":"upcoming","score":null,"tv":"FS1 / Peacock"},
+                {"id":3,"date":"2026-06-12","time":"15:00","home":"Canada","away":"Bosnia and Herzegovina","venue":"BMO Field, Toronto","group":"Group B","status":"upcoming","score":null,"tv":"FOX / Peacock"},
+                {"id":4,"date":"2026-06-12","time":"20:00","home":"United States","away":"Paraguay","venue":"SoFi Stadium, Los Angeles","group":"Group D","status":"upcoming","score":null,"tv":"FOX / Peacock"},
+                {"id":5,"date":"2026-06-13","time":"13:00","home":"Brazil","away":"Morocco","venue":"MetLife Stadium, New York/New Jersey","group":"Group C","status":"upcoming","score":null,"tv":"FS1 / Peacock"},
+                {"id":6,"date":"2026-06-13","time":"18:00","home":"Haiti","away":"Scotland","venue":"Gillette Stadium, Boston","group":"Group C","status":"upcoming","score":null,"tv":"FS1"},
+                {"id":7,"date":"2026-06-14","time":"12:00","home":"Germany","away":"Curaçao","venue":"AT&T Stadium, Dallas","group":"Group E","status":"upcoming","score":null,"tv":"FOX"},
+                {"id":8,"date":"2026-06-14","time":"15:00","home":"Netherlands","away":"Japan","venue":"Mercedes-Benz Stadium, Atlanta","group":"Group F","status":"upcoming","score":null,"tv":"FS1"},
+                {"id":9,"date":"2026-06-15","time":"14:00","home":"Spain","away":"Cabo Verde","venue":"Hard Rock Stadium, Miami","group":"Group H","status":"upcoming","score":null,"tv":"FOX / Peacock"},
+                {"id":10,"date":"2026-06-15","time":"17:00","home":"England","away":"Croatia","venue":"Levi's Stadium, San Francisco Bay Area","group":"Group I","status":"upcoming","score":null,"tv":"FS1"}
+            ],
+            "headlines": [
+                {"id":1,"date":"2026-05-18","title":"Mexico to open World Cup against South Africa at iconic Estadio Azteca","summary":"Hosts kick off the expanded 48-team tournament on home soil for the first time since 1986.","source":"FIFA"},
+                {"id":2,"date":"2026-05-17","title":"USA drawn with Paraguay, Australia & Türkiye — favorable path?","summary":"Co-hosts get a winnable group but must navigate tough South American opposition.","source":"ESPN"},
+                {"id":3,"date":"2026-05-16","title":"Brazil, Argentina, France headline star-studded groups","summary":"The big guns are spread across Groups C, K and J — early clashes expected.","source":"The Athletic"},
+                {"id":4,"date":"2026-05-15","title":"New format means 104 matches — longest World Cup ever","summary":"Round of 32 added; 8 best third-placed teams also advance.","source":"FIFA"},
+                {"id":5,"date":"2026-05-14","title":"Canada excited to host group stage matches in Toronto & Vancouver","summary":"Maple Leafs nation ready for its biggest football moment.","source":"CBC Sports"}
+            ],
+            "funStats": [
+                {"label":"Teams","value":"48","icon":"🌍"},
+                {"label":"Matches","value":"104","icon":"⚽"},
+                {"label":"Groups","value":"12","icon":"📊"},
+                {"label":"Venues","value":"16","icon":"🏟️"},
+                {"label":"Hosts","value":"3","icon":"🇨🇦🇲🇽🇺🇸"},
+                {"label":"Days","value":"39","icon":"📅"}
+            ]
+        };
+
+        let lastUpdatedEl;
+
+        function loadData() {
+            lastUpdatedEl = document.getElementById('last-updated');
+            if (lastUpdatedEl) {
+                const date = new Date(data.lastUpdated);
+                lastUpdatedEl.textContent = date.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' • ' + date.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+            }
+            renderMatches();
+            renderTeams();
+            renderHeadlines();
+            renderStats();
+            populateGroupFilter();
+        }
+
+        function populateGroupFilter() {
+            const select = document.getElementById('group-filter');
+            if (!select) return;
+            select.innerHTML = '<option value="">All Groups</option>';
+            data.groups.forEach(group => {
+                const opt = document.createElement('option');
+                opt.value = group.name;
+                opt.textContent = group.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function renderMatches(filtered = null) {
+            const container = document.getElementById('matches-container');
+            if (!container) return;
+            container.innerHTML = '';
+            let matches = filtered || data.matches || [];
+            
+            matches.forEach(match => {
+                const card = document.createElement('div');
+                card.className = `match-card bg-slate-900 border border-slate-700 rounded-3xl p-4`;
+                
+                const statusHTML = match.status === 'live' 
+                    ? `<span class="px-2.5 py-px text-[10px] font-bold bg-red-500 text-white rounded-2xl flex items-center gap-x-1 w-fit"><i class="fa-solid fa-circle fa-beat text-[8px]"></i> LIVE</span>`
+                    : `<span class="px-2.5 py-px text-[10px] font-medium bg-emerald-900 text-emerald-300 rounded-2xl">UPCOMING</span>`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="text-xs text-slate-400">${match.date} • ${match.time} ET</div>
+                            <div class="font-semibold mt-1">${match.home} <span class="text-emerald-400">vs</span> ${match.away}</div>
+                        </div>
+                        <div>${statusHTML}</div>
+                    </div>
+                    <div class="mt-3 text-sm text-slate-300">
+                        <div><i class="fa-solid fa-map-marker-alt text-emerald-500 mr-1.5"></i>${match.venue}</div>
+                    </div>
+                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-800 text-xs">
+                        <span class="bg-slate-800 px-2 py-px rounded text-emerald-400">${match.group}</span>
+                        <span class="text-slate-400">${match.tv}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterMatches() {
+            const term = document.getElementById('schedule-search').value.toLowerCase();
+            const group = document.getElementById('group-filter').value;
+            let filtered = data.matches;
+            if (term) filtered = filtered.filter(m => m.home.toLowerCase().includes(term) || m.away.toLowerCase().includes(term) || m.venue.toLowerCase().includes(term));
+            if (group) filtered = filtered.filter(m => m.group === group);
+            renderMatches(filtered);
+        }
+
+        function renderTeams() {
+            const container = document.getElementById('teams-container');
+            if (!container) return;
+            container.innerHTML = '';
+            data.groups.forEach(group => {
+                const div = document.createElement('div');
+                div.className = `bg-slate-900 border border-slate-700 rounded-3xl p-4`;
+                let html = `<div class="font-semibold text-emerald-400 mb-2">${group.name}</div>`;
+                group.teams.forEach(team => {
+                    html += `<div class="flex items-center gap-x-3 py-1 text-sm"><span class="team-flag">${group.flag}</span> <span>${team}</span></div>`;
+                });
+                div.innerHTML = html;
+                container.appendChild(div);
+            });
+        }
+
+        function filterTeams() {
+            const term = document.getElementById('team-search').value.toLowerCase();
+            document.querySelectorAll('#teams-container > div').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(term) ? '' : 'none';
+            });
+        }
+
+        function renderHeadlines() {
+            const container = document.getElementById('headlines-container');
+            if (!container) return;
+            container.innerHTML = '';
+            data.headlines.forEach(h => {
+                const div = document.createElement('div');
+                div.className = `glass border border-slate-700 rounded-3xl p-4`;
+                div.innerHTML = `<div class="text-xs text-emerald-400">${h.date} • ${h.source}</div><div class="font-semibold mt-1">${h.title}</div><div class="text-xs text-slate-400 mt-1">${h.summary}</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function renderStats() {
+            const container = document.getElementById('stats-container');
+            if (!container) return;
+            container.innerHTML = '';
+            data.funStats.forEach(stat => {
+                const div = document.createElement('div');
+                div.className = `bg-slate-900 border border-slate-700 rounded-3xl p-4 text-center`;
+                div.innerHTML = `<div class="text-3xl mb-2">${stat.icon}</div><div class="stat-value">${stat.value}</div><div class="text-xs text-slate-400">${stat.label}</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`section-${tab}`).classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        function refreshData() {
+            const btn = event.currentTarget;
+            if (btn) btn.disabled = true;
+            setTimeout(() => {
+                loadData();
+                if (btn) btn.disabled = false;
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs px-5 py-2 rounded-3xl flex items-center gap-x-2 shadow-xl';
+                toast.innerHTML = '✅ Data refreshed';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 1800);
+            }, 400);
+        }
+
+        function updateHeadlinesPrompt() {
+            alert("Just message me: \"Add these new headlines to the World Cup app\" and I'll update it instantly. Then refresh this page.");
+        }
+
+        function showInstallPrompt() {
+            alert("On iPhone: Tap Share → Add to Home Screen\nOn Android: Tap menu → Install app");
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                e.preventDefault();
+                const search = document.getElementById('schedule-search');
+                if (search) search.focus();
+            }
+        });
+
+        window.onload = function() {
+            loadData();
+            document.getElementById('tab-schedule').classList.add('active');
+            
+            // Easter egg
+            let k = '';
+            document.addEventListener('keydown', function(e) {
+                k += e.key;
+                if (k.length > 8) k = k.slice(-8);
+                if (k.includes('ArrowUpArrowDown')) {
+                    document.body.style.filter = 'hue-rotate(90deg)';
+                    setTimeout(() => document.body.style.filter = '', 1200);
+                    k = '';
+                }
+            });
+        };
+    </script>
+</body>
+</html>
