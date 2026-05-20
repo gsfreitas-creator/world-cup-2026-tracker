@@ -80,7 +80,6 @@
     <div class="max-w-7xl mx-auto px-4 pb-12">
         <h3 class="font-semibold text-2xl mb-4">FIFA & Trending on X</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- FIFA -->
             <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6">
                 <div class="flex items-center gap-x-3 mb-4">
                     <i class="fa-solid fa-globe text-emerald-400 text-2xl"></i>
@@ -92,16 +91,15 @@
                     <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/news" target="_blank" class="block hover:text-emerald-400">→ Latest FIFA Articles</a>
                 </div>
             </div>
-            <!-- Trending on X -->
             <div class="bg-[#121a2e] border border-slate-700 rounded-3xl p-6">
                 <div class="flex items-center gap-x-3 mb-4">
                     <i class="fa-brands fa-x-twitter text-emerald-400 text-2xl"></i>
                     <div class="font-semibold">Trending on X</div>
                 </div>
                 <div class="space-y-4 text-sm">
-                    <div class="border-l-4 border-emerald-500 pl-3">Lisa to headline opening ceremony</div>
-                    <div class="border-l-4 border-emerald-500 pl-3">Lisa, Anitta & Rema drop official song "Goals"</div>
-                    <div class="border-l-4 border-emerald-500 pl-3">FIFA launches official bracket predictor</div>
+                    <div>Lisa to headline opening ceremony</div>
+                    <div>Lisa, Anitta & Rema drop official song "Goals"</div>
+                    <div>FIFA launches official bracket predictor</div>
                 </div>
             </div>
         </div>
@@ -116,7 +114,7 @@
     </div>
 
     <script>
-        // Main Contenders (real Polymarket data May 2026)
+        // Main Contenders
         const contenders = [
             { name: "France", odds: "18.1%", flag: "https://flagcdn.com/w160/fr.png", reason: "Current favorite • Strong squad depth" },
             { name: "Spain", odds: "16.7%", flag: "https://flagcdn.com/w160/es.png", reason: "Tiki-taka revival • Young talent" },
@@ -124,6 +122,18 @@
             { name: "Brazil", odds: "9.0%", flag: "https://flagcdn.com/w160/br.png", reason: "Vinícius factor • Always dangerous" },
             { name: "Argentina", odds: "8.5%", flag: "https://flagcdn.com/w160/ar.png", reason: "Defending champions • Messi magic" },
             { name: "Germany", odds: "7.8%", flag: "https://flagcdn.com/w160/de.png", reason: "Efficiency + new generation" }
+        ];
+
+        // Groups with standings
+        const groups = [
+            { name: "A", standings: [{team:"Mexico",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"South Africa",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Korea Republic",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Czechia",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] },
+            { name: "B", standings: [{team:"Canada",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Bosnia",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Qatar",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Switzerland",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] },
+            { name: "C", standings: [{team:"Brazil",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Morocco",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Haiti",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Scotland",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] },
+            { name: "D", standings: [{team:"United States",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Paraguay",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Australia",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Türkiye",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] },
+            { name: "E", standings: [{team:"Germany",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Curaçao",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Côte d’Ivoire",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Ecuador",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] },
+            { name: "F", standings: [{team:"Netherlands",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Japan",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Tunisia",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Sweden",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] },
+            { name: "G", standings: [{team:"Belgium",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Egypt",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Iran",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"New Zealand",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] },
+            { name: "H", standings: [{team:"Spain",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Cabo Verde",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Saudi Arabia",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},{team:"Uruguay",pld:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}] }
         ];
 
         function renderContenders() {
@@ -143,6 +153,67 @@
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function renderGroups() {
+            const container = document.getElementById('groups-container');
+            container.innerHTML = '';
+            groups.forEach(g => {
+                const div = document.createElement('div');
+                div.className = `card-hover bg-[#121a2e] border border-slate-700 rounded-3xl p-4 cursor-pointer hover:border-emerald-600`;
+                div.onclick = () => showGroupModal(g);
+                div.innerHTML = `
+                    <div class="font-semibold text-xl">Group ${g.name}</div>
+                    <div class="text-xs text-slate-400 mt-1">${g.standings.map(s => s.team).join(" • ")}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function showGroupModal(group) {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-content');
+            
+            let html = `
+                <div class="mb-4">
+                    <div class="font-semibold text-3xl">Group ${group.name}</div>
+                    <div class="text-emerald-400">Standings</div>
+                </div>
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-xs text-slate-400 border-b border-slate-700">
+                            <th class="text-left py-2">Team</th>
+                            <th class="text-center">Pld</th>
+                            <th class="text-center">W</th>
+                            <th class="text-center">D</th>
+                            <th class="text-center">L</th>
+                            <th class="text-center">GF</th>
+                            <th class="text-center">GA</th>
+                            <th class="text-center">GD</th>
+                            <th class="text-center">Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            
+            group.standings.forEach(s => {
+                html += `
+                    <tr class="border-b border-slate-700">
+                        <td class="py-2 font-medium">${s.team}</td>
+                        <td class="text-center">${s.pld}</td>
+                        <td class="text-center">${s.w}</td>
+                        <td class="text-center">${s.d}</td>
+                        <td class="text-center">${s.l}</td>
+                        <td class="text-center">${s.gf}</td>
+                        <td class="text-center">${s.ga}</td>
+                        <td class="text-center">${s.gd}</td>
+                        <td class="text-center font-bold">${s.pts}</td>
+                    </tr>`;
+            });
+            
+            html += `</tbody></table>`;
+            content.innerHTML = html;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function showContenderModal(team) {
@@ -169,16 +240,8 @@
             modal.classList.add('hidden');
         }
 
-        // Fixed PWA Install (Android + iOS)
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
         function installApp() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt = null;
-            } else {
-                alert("To install:\n\nAndroid: Tap the install icon in the address bar\niPhone/iPad: Tap Share → Add to Home Screen");
-            }
+            alert("To install on your Pixel:\n1. Tap the three dots ⋮ in the top right\n2. Tap 'Install app' or 'Add to Home screen'");
         }
 
         function startCountdown() {
@@ -197,7 +260,8 @@
         function init() {
             startCountdown();
             renderContenders();
-            console.log('%c[World Cup 2026] V6.1 loaded successfully', 'color:#00a651');
+            renderGroups();
+            console.log('%c[World Cup 2026] V6.2 — Groups fixed & working', 'color:#00a651');
         }
 
         window.onload = init;
